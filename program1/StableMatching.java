@@ -10,15 +10,14 @@ public class StableMatching {
 	private void readInputFromFile(String filename) {
 		try {
 				Scanner scanner = new Scanner(new File(filename));
-				n = scanner.nextInt();
+				this.n = scanner.nextInt();
 				System.err.println("n = " + n);
 
 				// Read people and their preferences
-				people = new ArrayList<>();
+				this.people = new ArrayList<>();
 				for(int i = 0; i < n; i++) {
 					String name = scanner.next();
-					System.err.println("name = " + name);
-					people.add(new Person(name, n));
+					this.people.add(new Person(i+1, name, n));
 				}
 				
 				for (int i = 0; i < n; i++) {		
@@ -28,19 +27,16 @@ public class StableMatching {
 							int p = scanner.nextInt();
 							preferences.offer(p);
 							rank[p] = j;
-							System.out.println("rank[" + p + "] = " + j);
-							System.err.println("preferences.peek() = " + p);
 					}
-					people.get(i).setPreferences(preferences);
-					people.get(i).setRank(rank);
+					this.people.get(i).setPreferences(preferences);
+					this.people.get(i).setRank(rank);
 				}
 
 				// Read pets and their preferences
-				pets = new ArrayList<>();
+				this.pets = new ArrayList<>();
 				for(int i = 0; i < n; i++) {
 					String name = scanner.next();
-					System.err.println("name = " + name);
-					pets.add(new Pet(name, n));
+					this.pets.add(new Pet(i+1, name, n));
 				}
 
 				for (int i = 0; i < n; i++) {		
@@ -50,11 +46,9 @@ public class StableMatching {
 							int p = scanner.nextInt();
 							preferences.offer(p);
 							rank[p] = j;
-							System.out.println("rank[" + p + "] = " + j);
-							System.err.println("preferences.peek() = " + p);
 					}
-					pets.get(i).setPreferences(preferences);
-					pets.get(i).setRank(rank);
+					this.pets.get(i).setPreferences(preferences);
+					this.pets.get(i).setRank(rank);
 				}
 
 				scanner.close();
@@ -64,10 +58,38 @@ public class StableMatching {
 		}
 	}
 
+	private void match() {
+		Queue<Person> unmatchedPeople = new LinkedList<>(this.people);
+		while (!unmatchedPeople.isEmpty()) {
+			Person person = unmatchedPeople.poll();
+			int petIndex = person.getPreferences().poll();
+			Pet pet = this.pets.get(petIndex - 1);
+			if (pet.getMatch() == -1) {
+				person.setMatch(petIndex);
+				pet.setMatch(person.getId());
+			} else {
+				int currentMatch = pet.getMatch();
+				if (pet.getRank(person.getId()) < pet.getRank(currentMatch)) {
+					person.setMatch(petIndex);
+					pet.setMatch(person.getId());
+					unmatchedPeople.offer(this.people.get(currentMatch - 1));
+				} else {
+					unmatchedPeople.offer(person);
+				}
+			}
+		}
+	}
+
+	private void printMatches() {
+		for (Person person : this.people) {
+			System.out.println(person.getName() + " / " + this.pets.get(person.getMatch() - 1).getName());
+		}
+	}
+
 	public static void main(String[] args) {
 		StableMatching sm = new StableMatching();
-		System.err.println("Running");
 		sm.readInputFromFile("program1/program1data.txt");
-		System.err.println("Read input");
+		sm.match();
+		sm.printMatches();
 	}
 }
