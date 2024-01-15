@@ -7,6 +7,20 @@ public class StableMatching {
 	private ArrayList<Person> people;
 	private ArrayList<Pet> pets;
 
+	private void readPreferences(Scanner scanner, ArrayList<? extends Entity> entities) {
+		for (int i = 0; i < n; i++) {		
+			int[] rank = new int[n+1];
+			Queue<Integer> preferences = new LinkedList<>();
+			for (int j = 1; j <= n; j++) {
+					int p = scanner.nextInt();
+					preferences.offer(p);
+					rank[p] = j;
+			}
+			entities.get(i).setPreferences(preferences);
+			entities.get(i).setRank(rank);
+		}
+	}
+
 	private void readInputFromFile(String filename) {
 		try {
 				Scanner scanner = new Scanner(new File(filename));
@@ -20,17 +34,7 @@ public class StableMatching {
 					this.people.add(new Person(i+1, name, n));
 				}
 				
-				for (int i = 0; i < n; i++) {		
-					int[] rank = new int[n+1];
-					Queue<Integer> preferences = new LinkedList<>();
-					for (int j = 1; j <= n; j++) {
-							int p = scanner.nextInt();
-							preferences.offer(p);
-							rank[p] = j;
-					}
-					this.people.get(i).setPreferences(preferences);
-					this.people.get(i).setRank(rank);
-				}
+				readPreferences(scanner, this.people);
 
 				// Read pets and their preferences
 				this.pets = new ArrayList<>();
@@ -39,17 +43,7 @@ public class StableMatching {
 					this.pets.add(new Pet(i+1, name, n));
 				}
 
-				for (int i = 0; i < n; i++) {		
-					int[] rank = new int[n+1];
-					Queue<Integer> preferences = new LinkedList<>();
-					for (int j = 1; j <= n; j++) {
-							int p = scanner.nextInt();
-							preferences.offer(p);
-							rank[p] = j;
-					}
-					this.pets.get(i).setPreferences(preferences);
-					this.pets.get(i).setRank(rank);
-				}
+				readPreferences(scanner, this.pets);
 
 				scanner.close();
 		} catch (FileNotFoundException e) {
@@ -60,10 +54,13 @@ public class StableMatching {
 
 	private void match() {
 		Queue<Person> unmatchedPeople = new LinkedList<>(this.people);
+		
 		while (!unmatchedPeople.isEmpty()) {
 			Person person = unmatchedPeople.poll();
+			
 			int petIndex = person.getPreferences().poll();
 			Pet pet = this.pets.get(petIndex - 1);
+			
 			if (pet.getMatch() == -1) {
 				person.setMatch(petIndex);
 				pet.setMatch(person.getId());
