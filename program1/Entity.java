@@ -51,7 +51,7 @@ public abstract class Entity {
 
 	/**
 	 * accessor for the preference list of the entity.
-	 * pre: none
+	 * pre: preference list has been allocated memory and initialized.
 	 * post: returns preference list of the entity
 	 */
 	public Queue<Integer> getPreferences() {
@@ -69,7 +69,7 @@ public abstract class Entity {
 
 	/**
 	 * accessor for the rank i.e. inverse preferences of the entity.
-	 * pre: none
+	 * pre: rank has been allocated memory and initialized.
 	 * post: returns rank of the entity for the given index
 	 */
 	public int getRank(int index) {
@@ -87,7 +87,7 @@ public abstract class Entity {
 
 	/**
 	 * setter for the preference list of the entity.
-	 * pre: linked list has been initialized.
+	 * pre: preferences has been allocated memory.
 	 * post: preference list is set.
 	 */
 	public void setPreferences(Queue<Integer> preferences) {
