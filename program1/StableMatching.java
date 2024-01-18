@@ -83,16 +83,21 @@ public class StableMatching {
 			int petIndex = person.getPreferences().poll();
 			Pet pet = this.pets.get(petIndex - 1);
 			
+			// If pet is not matched, then match person and pet
 			if (pet.getMatch() == -1) {
 				person.setMatch(petIndex);
 				pet.setMatch(person.getId());
 			} else {
 				int currentMatch = pet.getMatch();
+				// If pet prefers person over it's current match, 
+				// then match person and pet and add current match to unmatched people
 				if (pet.getRank(person.getId()) < pet.getRank(currentMatch)) {
 					person.setMatch(petIndex);
 					pet.setMatch(person.getId());
 					unmatchedPeople.offer(this.people.get(currentMatch - 1));
 				} else {
+					// If pet does not prefer person over it's current match, 
+					// then add person to unmatched queue
 					unmatchedPeople.offer(person);
 				}
 			}
@@ -111,16 +116,41 @@ public class StableMatching {
 	}
 
 	/**
+	 * function to check if the matching is stable.
+	 * pre: matches have been set for all people and pets.
+	 * post: returns true if matching is stable, false otherwise.
+	 */
+	private boolean isStable() {
+    for (Person person : this.people) {
+			for (int petIndex : person.getPreferences()) {
+					Pet pet = this.pets.get(petIndex - 1);
+					// If pet is matched to person, then it is stable
+					if (pet.getMatch() == person.getId()) {
+							break;
+					}
+					Person currentMatch = this.people.get(pet.getMatch() - 1);
+					// If pet prefers person over it's current match and person prefers pet over it's current match, 
+					// then it is unstable
+					if (pet.getRank(person.getId()) < pet.getRank(currentMatch.getId()) 
+						&& person.getRank(petIndex) < person.getRank(currentMatch.getMatch())) {
+						System.out.println(person.getName() + " / " + pet.getName() + " prefers each other over their current match " + currentMatch.getName());
+						return false;
+					}
+			}
+    }
+    return true;
+	}
+
+	/**
 	 * main function.
 	 * pre: none
 	 * post: stable matching class is instantiated, matches are made and printed.
 	 */
 	public static void main(String[] args) {
-		long startTime = System.currentTimeMillis();
 		StableMatching sm = new StableMatching();
 		sm.readInputFromFile("program1/program1data.txt");
 		sm.match();
 		sm.printMatches();
-		System.out.println("Time = " + (System.currentTimeMillis() - startTime));
+		System.out.println("Stable = " + sm.isStable());
 	}
 }
