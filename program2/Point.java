@@ -1,3 +1,8 @@
+/**
+ * Class to represent a point
+ * Functionality includes calculating the distance between two points and getting the coordinates of a point.
+ * @author Sumit Hotchandani
+ */
 package program2;
 
 /**
@@ -6,15 +11,15 @@ package program2;
  * Functionality includes calculating the distance between two points and getting the coordinates of a point.
  */
 public class Point {
-	private int x;
-	private int y;
+	private double x;
+	private double y;
 
 	/**
 	 * Constructor to create a point with given coordinates.
 	 * pre: none
 	 * post: a point is created with given coordinates.
 	 */
-	public Point(int x, int y) {
+	public Point(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -33,7 +38,11 @@ public class Point {
 	 * pre: none
 	 * post: coordinates of a point are returned.
 	 */
-	public int[] getCoodinates() {
-		return new int[] {this.x, this.y};
+	public double[] getCoodinates() {
+		return new double[] {this.x, this.y};
+	}
+
+	public double getX() {
+		return this.x;
 	}
 }
