@@ -13,15 +13,17 @@ package program2;
 public class Point {
 	private double x;
 	private double y;
+	private int index;
 
 	/**
 	 * Constructor to create a point with given coordinates.
 	 * pre: none
 	 * post: a point is created with given coordinates.
 	 */
-	public Point(double x, double y) {
+	public Point(double x, double y, int index) {
 		this.x = x;
 		this.y = y;
+		this.index = index;
 	}
 
 	/**
@@ -34,15 +36,38 @@ public class Point {
 	}
 
 	/**
-	 * function to get the coordinates of a point.
+	 * function to get the x coordinate of a point.
 	 * pre: none
-	 * post: coordinates of a point are returned.
+	 * post: x coordinate of a point is returned.
 	 */
-	public double[] getCoodinates() {
-		return new double[] {this.x, this.y};
-	}
-
 	public double getX() {
 		return this.x;
+	}
+
+	/**
+	 * function to get the y coordinate of a point.
+	 * pre: none
+	 * post: y coordinate of a point is returned.
+	 */
+	public double getY() {
+		return this.y;
+	}
+
+	/**
+	 * function to get the index of a point.
+	 * pre: none
+	 * post: index of a point is returned.
+	 */
+	public int getIndex() {
+		return this.index;
+	}
+
+	/**
+	 * function to set the index of a point.
+	 * pre: none
+	 * post: index of a point is set.
+	 */
+	public void setIndex(int index) {
+    this.index = index;
 	}
 }
