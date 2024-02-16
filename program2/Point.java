@@ -27,9 +27,9 @@ public class Point {
 	}
 
 	/**
-	 * function to calculate the distance between two points.
+	 * function to calculate the Euclidean distance between two points.
 	 * pre: none
-	 * post: distance between two points is calculated and returned.
+	 * post: Euclidean distance between two points is calculated and returned.
 	 */
 	public double distance(Point p) {
 		return Math.sqrt(Math.pow(this.x - p.x, 2) + Math.pow(this.y - p.y, 2));
